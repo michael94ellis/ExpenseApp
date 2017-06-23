@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1007642659772",
+    "firebase_url": "https://expense-app-eefd3.firebaseio.com",
+    "project_id": "expense-app-eefd3",
+    "storage_bucket": "expense-app-eefd3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1007642659772:android:9b52d36158899856",
+        "android_client_info": {
+          "package_name": "com.mellis.expenseapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1007642659772-avn0ivsb0lg90s9hjvi69d2ilciseqbi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mellis.expenseapp",
+            "certificate_hash": "5f1d59853a268ef68055fee4973180594e07325a"
+          }
+        },
+        {
+          "client_id": "1007642659772-2oupbda5abl4s5mi2phm141blpotj9te.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkQsVM2ybqHaXCve2Sb6-x62HH2FTLXjE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1007642659772-2oupbda5abl4s5mi2phm141blpotj9te.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

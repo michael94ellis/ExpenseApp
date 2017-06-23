@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">ExpenseApp</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="current_expenses">Current Expenses: \u0020</string>
+    <string name="new_name">Expense Name</string>
+    <string name="new_category">Category</string>
+    <string name="new_amount">Amount</string>
+    <string name="add_expense_header">Add An Expense</string>
+    <string name="add_expense_button">Add Expense</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="details_header">Expense Details</string>
+    <string name="close">Close</string>
+    <string name="no_expenses">There are no expenses to show, please add some expenses!</string>
+    <string name="no_expenses_to_show_please_add_some_expenses_with_the_button_above">No expenses to show, please add some expenses with the button above</string>
+    <string name="Edit">Edit</string>
+    <string name="edit_expense_label">Edit An Expense</string>
+    <string name="save_edit">save</string>
+    <string-array name="expense_categories">
+        <item>Groceries</item>
+        <item>Invoice</item>
+        <item>Transportation</item>
+        <item>Shopping</item>
+        <item>Rent</item>
+        <item>Trips</item>
+        <item>Utilities</item>
+        <item>Other</item>
+    </string-array>
+</resources>
