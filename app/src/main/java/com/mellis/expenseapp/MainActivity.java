@@ -1,16 +1,12 @@
 package com.mellis.expenseapp;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,12 +15,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements EditExpenseFragment.ExpenseEditCompleteCallback, ExpenseDetailsFragment.EditExpenseCallback, ExpenseListFragment.ExpenseListCallback, AddExpenseFragment.AddExpenseCallback {
+public class MainActivity extends AppCompatActivity implements DatePickerFragment.DateSelectionCallback, ExpenseDetailsFragment.EditExpenseCallback, ExpenseListFragment.ExpenseListCallback, AddExpenseFragment.AddExpenseCallback {
     private static final String LOGNAME = "Main";
     FragmentManager fm;
     static ArrayList<Expense> expenseList;
     FirebaseDatabase database;
     DatabaseReference myRef;
+    Fragment currentFrag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +29,8 @@ public class MainActivity extends AppCompatActivity implements EditExpenseFragme
         setContentView(R.layout.activity_main);
         fm = getSupportFragmentManager();
 
-            database = FirebaseDatabase.getInstance();
-            myRef = database.getReference("expenses");
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("expenses");
         expenseList = new ArrayList<>();
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -41,13 +38,12 @@ public class MainActivity extends AppCompatActivity implements EditExpenseFragme
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 expenseList.clear();
-                for(DataSnapshot node: dataSnapshot.getChildren()){
+                for (DataSnapshot node : dataSnapshot.getChildren()) {
                     Log.d(LOGNAME, "Expense is: " + node);
                     String name = (String) node.child("name").getValue();
                     String date = (String) node.child("date").getValue();
-                    String category = (String) node.child("category").getValue();
                     String amount = node.child("amount").getValue().toString();
-                    expenseList.add(new Expense(name,category,amount,date));
+                    expenseList.add(new Expense(name, amount, date));
                 }
                 openListFragment();
             }
@@ -63,12 +59,12 @@ public class MainActivity extends AppCompatActivity implements EditExpenseFragme
     @Override
     public void addExpense() {
         FragmentTransaction ft = fm.beginTransaction();
-        AddExpenseFragment a = (AddExpenseFragment) fm.findFragmentByTag("AddExpenseFragment");
-        a = new AddExpenseFragment();
+        AddExpenseFragment a = new AddExpenseFragment();
         ft.replace(R.id.mainLayout, a, "AddExpenseFragment");
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.addToBackStack(null);
         ft.commit();
+        currentFrag = a;
     }
 
     @Override
@@ -77,15 +73,14 @@ public class MainActivity extends AppCompatActivity implements EditExpenseFragme
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot node: dataSnapshot.getChildren()){
+                for (DataSnapshot node : dataSnapshot.getChildren()) {
                     Log.d(LOGNAME, "Expense is: " + node);
                     String name = (String) node.child("name").getValue();
                     String date = (String) node.child("date").getValue();
-                    String category = (String) node.child("category").getValue();
                     String amount = node.child("amount").getValue().toString();
-                    Expense e = new Expense(name,category,amount,date);
-                    if (e.equals(expense)){
-                       node.getRef().removeValue();
+                    Expense e = new Expense(name, amount, date);
+                    if (e.equals(expense)) {
+                        node.getRef().removeValue();
                     }
                 }
             }
@@ -147,11 +142,16 @@ public class MainActivity extends AppCompatActivity implements EditExpenseFragme
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.addToBackStack(null);
         ft.commit();
+        currentFrag = a;
     }
 
-    @Override
-    public boolean editExpenseComplete() {
 
-        return false;
+    @Override
+    public void dispatchNewDate(String date) {
+        if(currentFrag instanceof AddExpenseFragment) {
+            ((AddExpenseFragment) currentFrag).setDateText(date);
+        }else if(currentFrag instanceof EditExpenseFragment){
+            ((EditExpenseFragment) currentFrag).setDateText(date);
+        }
     }
 }

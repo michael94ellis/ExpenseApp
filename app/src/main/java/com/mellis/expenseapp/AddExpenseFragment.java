@@ -7,22 +7,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 
 public class AddExpenseFragment extends Fragment {
 
     EditText etName, etAmount;
-    Spinner etCategory;
+    TextView tvDate;
+    String date;
 
     private AddExpenseCallback addExpenseCallback;
 
+
     public interface AddExpenseCallback {
         public void dispatchNewExpense(Expense newExpense);
+    }
+
+    public void setDateText(String date){
+        tvDate.setText("Date: "+date);
+        this.date=date;
     }
 
     public AddExpenseFragment() {
@@ -37,6 +41,7 @@ public class AddExpenseFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        date = "";
     }
 
     @Override
@@ -46,25 +51,36 @@ public class AddExpenseFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_expense, container, false);
         etName = (EditText) view.findViewById(R.id.etExpenseName);
         etAmount = (EditText) view.findViewById(R.id.etExpenseAmount);
-        etCategory = (Spinner) view.findViewById(R.id.spinner);
+        tvDate = (TextView) view.findViewById(R.id.tvAddExpenseDate);
 
         view.findViewById(R.id.submitExpenseButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String name = etName.getText().toString();
-                if(!name.equals("")) {
+                if (!name.equals("")) {
                     String amount = etAmount.getText().toString();
-                    if(!amount.equals("")) {
-                    String category = etCategory.getSelectedItem().toString();
-                    String formattedDate = new SimpleDateFormat("MM/dd/yyyy").format(Calendar.getInstance().getTime());
-                    addExpenseCallback.dispatchNewExpense(new Expense(name, category, amount, formattedDate));
-                    getActivity().getSupportFragmentManager().beginTransaction().remove(AddExpenseFragment.this).commit();
-                    }else{
-                        Toast.makeText(getContext(),"Add an amount for the expense",Toast.LENGTH_SHORT).show();
+                    if (!amount.equals("")) {
+                        if (!date.equals("")) {
+                            addExpenseCallback.dispatchNewExpense(new Expense(name, amount, date));
+                            getActivity().getSupportFragmentManager().beginTransaction().remove(AddExpenseFragment.this).commit();
+                        } else {
+                            Toast.makeText(getContext(), " Please select a date", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getContext(), "Add an amount for the expense", Toast.LENGTH_SHORT).show();
                     }
-                }else{
-                    Toast.makeText(getContext(),"Add a name for the expense",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Add a name for the expense", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        view.findViewById(R.id.addExpenseDateButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                DatePickerFragment datePickerFrag = new DatePickerFragment();
+                datePickerFrag.show(getActivity().getFragmentManager(), "DatePicker");
             }
         });
 
@@ -94,4 +110,6 @@ public class AddExpenseFragment extends Fragment {
         super.onDetach();
         addExpenseCallback = null;
     }
+
+
 }

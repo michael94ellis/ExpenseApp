@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class ExpenseListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         //This makes ListView the same as RecycleView because it reduces calls
         //to findViewById and allows us to keep the views fresh and clean
         final ViewHolder holder;
@@ -50,17 +51,28 @@ public class ExpenseListAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.tvName = (TextView) convertView.findViewById(R.id.expenseItemName);
             holder.tvAmount = (TextView) convertView.findViewById(R.id.expenseItemAmount);
+            holder.tvDate = (TextView) convertView.findViewById(R.id.expenseItemDate);
+            holder.editExpenseButton = (ImageButton) convertView.findViewById(R.id.imageButtonEditExpense);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.tvName.setText(expenseList.get(position).getName());
-        holder.tvAmount.setText("$"+expenseList.get(position).getAmount());
+        holder.tvAmount.setText("Cost: $"+expenseList.get(position).getAmount());
+        holder.tvDate.setText("Date: "+expenseList.get(position).getDate());
+        holder.editExpenseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ExpenseDetailsFragment.EditExpenseCallback)ctx).beginEditExpense(expenseList.get(position));
+            }
+        });
         return convertView;
     }
     //Represents all the widgets in a layout resouce file
     static class ViewHolder {
         TextView tvName;
         TextView tvAmount;
+        TextView tvDate;
+        ImageButton editExpenseButton;
     }
 }

@@ -10,12 +10,10 @@ import android.os.Parcelable;
 public class Expense implements Parcelable {
     String name;
     String date;
-    String category;
     String amount;
 
-    public Expense(String name, String category, String amount, String date) {
+    public Expense(String name, String amount, String date) {
         this.name = name;
-        this.category = category;
         this.amount = amount;
         this.date = date;
     }
@@ -26,14 +24,6 @@ public class Expense implements Parcelable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public String getAmount() {
@@ -58,7 +48,6 @@ public class Expense implements Parcelable {
         Expense e2 = (Expense)obj;
         if(this.getName().equals(e2.getName())
             &&this.getAmount().equals(e2.getAmount())
-            &&this.getCategory().equals(e2.getCategory())
             &&this.getDate().equals(e2.getDate())){
             return true;
         }
@@ -68,7 +57,6 @@ public class Expense implements Parcelable {
     protected Expense(Parcel in) {
         name = in.readString();
         date = in.readString();
-        category = in.readString();
         amount = in.readString();
     }
 
@@ -81,7 +69,6 @@ public class Expense implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
         dest.writeString(date);
-        dest.writeString(category);
         dest.writeString(amount);
     }
 

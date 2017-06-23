@@ -28,15 +28,18 @@ public class EditExpenseFragment extends Fragment {
     private static final String ARG_PARAM1 = "edit";
     Expense expense;
     EditText etName, etAmount;
-    Spinner spinner;
+    TextView tvDate;
+    String date;
 
-    ExpenseEditCompleteCallback expenseEditCompleteCallback;
+    public void setDateText(String date){
+        tvDate.setText("Date: "+date);
+        this.date=date;
+    }
+
     AddExpenseFragment.AddExpenseCallback addExpenseCallback;
     ExpenseListFragment.ExpenseListCallback expenseListCallback;
 
-    public interface ExpenseEditCompleteCallback{
-        public boolean editExpenseComplete();
-    }
+
     public EditExpenseFragment() {
         // Required empty public constructor
     }
@@ -65,9 +68,8 @@ public class EditExpenseFragment extends Fragment {
                 for(DataSnapshot node: dataSnapshot.getChildren()){
                     String name = (String) node.child("name").getValue();
                     String date = (String) node.child("date").getValue();
-                    String category = (String) node.child("category").getValue();
                     String amount = node.child("amount").getValue().toString();
-                    Expense e = new Expense(name,category,amount,date);
+                    Expense e = new Expense(name,amount,date);
                     if (e.equals(expense)){
 
                     }
@@ -103,9 +105,7 @@ public class EditExpenseFragment extends Fragment {
                     String amount = etAmount.getText().toString();
                     if(!amount.equals("")) {
                         expenseListCallback.deleteExpense(expense);
-                        String category = spinner.getSelectedItem().toString();
-                        String formattedDate = new SimpleDateFormat("MM/dd/yyyy").format(Calendar.getInstance().getTime());
-                        addExpenseCallback.dispatchNewExpense(new Expense(name, category, amount, formattedDate));
+                        addExpenseCallback.dispatchNewExpense(new Expense(name, amount, date));
                         getActivity().getSupportFragmentManager().beginTransaction().remove(EditExpenseFragment.this).commit();
                     }else{
                         Toast.makeText(getContext(),"Add an amount for the expense",Toast.LENGTH_SHORT).show();
@@ -115,19 +115,22 @@ public class EditExpenseFragment extends Fragment {
                 }
             }
         });
+        view.findViewById(R.id.editExpenseDateButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                DatePickerFragment datePickerFrag = new DatePickerFragment();
+                datePickerFrag.show(getActivity().getFragmentManager(), "DatePicker");
+            }
+        });
+
+        tvDate = (TextView)view.findViewById(R.id.tvEditExpenseDate);
+        tvDate.setText("Date: "+ expense.getDate());
+        date = expense.getDate();
         etName = ((EditText)view.findViewById(R.id.etExpenseName));
         etAmount =  ((EditText)view.findViewById(R.id.etExpenseAmount));
         etName.setText(expense.getName());
         etAmount.setText(expense.getAmount());
-        spinner = ((Spinner)view.findViewById(R.id.spinner));
-        String compareValue = expense.getCategory();
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.expense_categories, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        if (!compareValue.equals(null)) {
-            int spinnerPosition = adapter.getPosition(compareValue);
-            spinner.setSelection(spinnerPosition);
-        }
         return view;
     }
 
@@ -135,12 +138,6 @@ public class EditExpenseFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof ExpenseEditCompleteCallback) {
-            expenseEditCompleteCallback = (ExpenseEditCompleteCallback) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement ExpenseEditCompleteCallback");
-        }
         if (context instanceof AddExpenseFragment.AddExpenseCallback) {
             addExpenseCallback = (AddExpenseFragment.AddExpenseCallback) context;
         } else {

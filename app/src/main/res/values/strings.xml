@@ -6,7 +6,7 @@
     <string name="current_expenses">Current Expenses: \u0020</string>
     <string name="new_name">Expense Name</string>
     <string name="new_category">Category</string>
-    <string name="new_amount">Amount</string>
+    <string name="new_amount">Cost</string>
     <string name="add_expense_header">Add An Expense</string>
     <string name="add_expense_button">Add Expense</string>
     <string name="cancel_button">Cancel</string>
@@ -17,14 +17,5 @@
     <string name="Edit">Edit</string>
     <string name="edit_expense_label">Edit An Expense</string>
     <string name="save_edit">save</string>
-    <string-array name="expense_categories">
-        <item>Groceries</item>
-        <item>Invoice</item>
-        <item>Transportation</item>
-        <item>Shopping</item>
-        <item>Rent</item>
-        <item>Trips</item>
-        <item>Utilities</item>
-        <item>Other</item>
-    </string-array>
+    <string name="pick_date_button">Pick Date</string>
 </resources>

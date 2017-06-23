@@ -58,7 +58,6 @@ public class ExpenseDetailsFragment extends Fragment {
         });
 
         ((TextView) view.findViewById(R.id.nameDetail)).setText("Name: " + expense.getName());
-        ((TextView) view.findViewById(R.id.categoryDetail)).setText("Category: " + expense.getCategory());
         ((TextView) view.findViewById(R.id.amountDetail)).setText("Amount: $" + expense.getAmount());
         ((TextView) view.findViewById(R.id.dateDetail)).setText("Date: " + expense.getDate());
 
